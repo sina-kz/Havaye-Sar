@@ -17,15 +17,22 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.khodeti.Networking.ReceiveImageResponse;
 import com.example.khodeti.Networking.RetrofitClientInstance;
 import com.example.khodeti.Networking.SendImageApi;
 
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MyCameraActivity extends Activity {
     private static final int CAMERA_REQUEST = 1888;
@@ -89,22 +96,29 @@ public class MyCameraActivity extends Activity {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             photo.compress(Bitmap.CompressFormat.PNG, 100, stream);
             byte[] byteArray = stream.toByteArray();
-            String encodedImage = Base64.encodeToString(byteArray , Base64.DEFAULT);
+            final String encodedImage = Base64.encodeToString(byteArray , Base64.DEFAULT);
             Log.d("kiri" , encodedImage);
 //            photo.recycle();
-            SendImageApi imageApi = RetrofitClientInstance.getRetrofitInstance().create(SendImageApi.class);
-            Call<ReceiveImageResponse> call = imageApi.sendImageReq(encodedImage);
-            call.enqueue(new Callback<ReceiveImageResponse>() {
+            RequestQueue queue = Volley.newRequestQueue(this);
+            String url ="https://127.0.0.1:8000";
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
-                public void onResponse(Call<ReceiveImageResponse> call, Response<ReceiveImageResponse> response) {
-                    Toast.makeText(getApplicationContext() , "assadf" , Toast.LENGTH_LONG);
-                }
+                public void onResponse(String response) {
 
-                @Override
-                public void onFailure(Call<ReceiveImageResponse> call, Throwable t) {
-                    Toast.makeText(MyCameraActivity.this, "kiram to hossein hosseini madarjende", Toast.LENGTH_SHORT).show();
                 }
-            });
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            }){
+                protected Map<String , String> getParams(){
+                    Map<String , String> params = new HashMap<>();
+                    params.put("content" , encodedImage);
+                    return params;
+                }
+            };
+            queue.add(stringRequest);
 
 
         }
