@@ -3,10 +3,10 @@ package com.example.khodeti.Networking;
 import com.google.gson.annotations.SerializedName;
 
 public class ReceiveImageResponse {
-    @SerializedName("isOk")
-    public boolean isOk;
+    @SerializedName("Status")
+    public boolean Status;
 
-    public ReceiveImageResponse(boolean isOk) {
-        this.isOk = isOk;
+    public ReceiveImageResponse(boolean Status) {
+        this.Status = Status;
     }
 }

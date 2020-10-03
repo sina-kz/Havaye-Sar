@@ -8,5 +8,5 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 public interface SendImageApi {
     @POST("/photo/")
-    Call<ReceiveImageResponse> sendImageReq(@Query("Photo") String photo);
+    Call<ReceiveImageResponse> sendImageReq(@Query("content") String photo);
 }
