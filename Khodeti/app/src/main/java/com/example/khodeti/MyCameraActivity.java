@@ -102,7 +102,7 @@ public class MyCameraActivity extends Activity {
 
                 @Override
                 public void onFailure(Call<ReceiveImageResponse> call, Throwable t) {
-
+                    Toast.makeText(MyCameraActivity.this, "kiram to hossein hosseini madarjende", Toast.LENGTH_SHORT).show();
                 }
             });
 
