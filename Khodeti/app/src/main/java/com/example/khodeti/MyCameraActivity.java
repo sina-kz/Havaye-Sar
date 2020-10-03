@@ -17,7 +17,15 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
+import com.example.khodeti.Networking.ReceiveImageResponse;
+import com.example.khodeti.Networking.RetrofitClientInstance;
+import com.example.khodeti.Networking.SendImageApi;
+
 import java.io.ByteArrayOutputStream;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MyCameraActivity extends Activity {
     private static final int CAMERA_REQUEST = 1888;
@@ -84,6 +92,20 @@ public class MyCameraActivity extends Activity {
             String encodedImage = Base64.encodeToString(byteArray , Base64.DEFAULT);
             Log.d("kiri" , encodedImage);
 //            photo.recycle();
+            SendImageApi imageApi = RetrofitClientInstance.getRetrofitInstance().create(SendImageApi.class);
+            Call<ReceiveImageResponse> call = imageApi.sendImageReq(encodedImage);
+            call.enqueue(new Callback<ReceiveImageResponse>() {
+                @Override
+                public void onResponse(Call<ReceiveImageResponse> call, Response<ReceiveImageResponse> response) {
+                    Toast.makeText(getApplicationContext() , "assadf" , Toast.LENGTH_LONG);
+                }
+
+                @Override
+                public void onFailure(Call<ReceiveImageResponse> call, Throwable t) {
+
+                }
+            });
+
 
         }
     }
